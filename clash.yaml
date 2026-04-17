@@ -1,0 +1,159 @@
+# Clash YAML 配置 - 基于 ACL4SSR 修改
+# 规则来源: https://github.com/ACL4SSR/ACL4SSR
+
+proxy-groups:
+  # 🔀 全部CF节点 - 自动选择
+  - name: 🔀 全部节点
+    type: url-test
+    proxies:
+      - 🔒 节点1
+      - 🔒 节点2
+    url: "http://www.gstatic.com/generate_204"
+    interval: 300
+    use:
+      - provider
+
+  # 🇯🇵 日本节点 - 用于需要干净IP的网站
+  - name: 🇯🇵 日本节点
+    type: select
+    proxies:
+      - JP[Hysteria2]
+      - 🔀 全部节点
+
+  # 📺 流媒体 - 全部节点自动选
+  - name: 📺 流媒体
+    type: url-test
+    proxies:
+      - 🔀 全部节点
+    url: "http://www.gstatic.com/generate_204"
+
+  # 📱 Telegram - 全部节点
+  - name: 📱 Telegram
+    type: url-test
+    proxies:
+      - 🔀 全部节点
+    url: "http://www.gstatic.com/generate_204"
+
+  # 🤖 AI服务 - 日本节点
+  - name: 🤖 AI服务
+    type: select
+    proxies:
+      - 🇯🇵 日本节点
+
+  # 🍎 苹果/微软 - 直连
+  - name: 🍎 苹果服务
+    type: select
+    proxies:
+      - DIRECT
+      - 🔀 全部节点
+
+  # 🔔 谷歌FCM/服务 - 日本节点
+  - name: 🔔 谷歌服务
+    type: select
+    proxies:
+      - 🇯🇵 日本节点
+      - 🔀 全部节点
+
+# 规则
+rules:
+  # 🤖 AI服务 - 日本节点
+  - DOMAIN-SUFFIX,openai.com,🤖 AI服务
+  - DOMAIN-SUFFIX,chatgpt.com,🤖 AI服务
+  - DOMAIN-SUFFIX,gemini.google,🤖 AI服务
+  - DOMAIN-SUFFIX,anthropic.com,🤖 AI服务
+  - DOMAIN-SUFFIX,claude.ai,🤖 AI服务
+  - DOMAIN-SUFFIX,copilot.microsoft.com,🤖 AI服务
+  - DOMAIN-SUFFIX,poe.com,🤖 AI服务
+  - DOMAIN-SUFFIX,claude.de,🤖 AI服务
+  - DOMAIN-SUFFIX,gemini.com,🤖 AI服务
+
+  # 📺 YouTube/流媒体 - 全部节点
+  - DOMAIN-SUFFIX,youtube.com,📺 流媒体
+  - DOMAIN-SUFFIX,googlevideo.com,📺 流媒体
+  - DOMAIN-SUFFIX,ytimg.com,📺 流媒体
+  - DOMAIN-SUFFIX,ytmfd.com,📺 流媒体
+  - DOMAIN-SUFFIX,tiktok.com,📺 流媒体
+  - DOMAIN-SUFFIX,twimg.com,📺 流媒体
+  - DOMAIN-SUFFIX,tiktokv.com,📺 流媒体
+
+  # 📱 Telegram - 全部节点
+  - DOMAIN-SUFFIX,telegram.org,📱 Telegram
+  - DOMAIN-SUFFIX,telegram.me,📱 Telegram
+  - DOMAIN-SUFFIX,telegram-dns.com,📱 Telegram
+  - IP-CIDR,91.108.56.0/22,📱 Telegram
+  - IP-CIDR,91.108.4.0/22,📱 Telegram
+  - IP-CIDR,149.154.160.0/20,📱 Telegram
+
+  # 🍎 苹果服务 - 直连
+  - DOMAIN-SUFFIX,apple.com,🍎 苹果服务
+  - DOMAIN-SUFFIX,icloud.com,🍎 苹果服务
+  - DOMAIN-SUFFIX,mzstatic.com,🍎 苹果服务
+  - DOMAIN-SUFFIX,cdn-apple.com,🍎 苹果服务
+  - DOMAIN-SUFFIX,apple-cloudkit.com,🍎 苹果服务
+  - DOMAIN-SUFFIX,applemusic.com,🍎 苹果服务
+  - DOMAIN-SUFFIX,tv.apple.com,🍎 苹果服务
+
+  # 💻 微软服务 - 直连
+  - DOMAIN-SUFFIX,microsoft.com,DIRECT
+  - DOMAIN-SUFFIX,office.com,DIRECT
+  - DOMAIN-SUFFIX,office365.com,DIRECT
+  - DOMAIN-SUFFIX,windows.com,DIRECT
+  - DOMAIN-SUFFIX,msftconnecttest.com,DIRECT
+  - DOMAIN-SUFFIX,msftncsi.com,DIRECT
+  - DOMAIN-SUFFIX,azure.com,DIRECT
+  - DOMAIN-SUFFIX,windowsazure.com,DIRECT
+  - DOMAIN-SUFFIX,bing.com,DIRECT
+  - DOMAIN-SUFFIX,linkedin.com,DIRECT
+  - DOMAIN-SUFFIX,github.com,DIRECT
+  - DOMAIN-SUFFIX,githubusercontent.com,DIRECT
+
+  # 🔔 谷歌FCM/服务 - 日本节点
+  - DOMAIN-SUFFIX,googleapis.com,🔔 谷歌服务
+  - DOMAIN-SUFFIX,google.com,🔔 谷歌服务
+  - DOMAIN-SUFFIX,gstatic.com,🔔 谷歌服务
+  - DOMAIN-SUFFIX,firebase.com,🔔 谷歌服务
+  - DOMAIN-KEYWORD,fcm,🔔 谷歌服务
+  - DOMAIN-KEYWORD,googleapis,🔔 谷歌服务
+
+  # 🇨🇳 国内网站 - 直连
+  - DOMAIN-SUFFIX,baidu.com,DIRECT
+  - DOMAIN-SUFFIX,baidubcr.com,DIRECT
+  - DOMAIN-SUFFIX,qq.com,DIRECT
+  - DOMAIN-SUFFIX,taobao.com,DIRECT
+  - DOMAIN-SUFFIX,tmall.com,DIRECT
+  - DOMAIN-SUFFIX,jd.com,DIRECT
+  - DOMAIN-SUFFIX,163.com,DIRECT
+  - DOMAIN-SUFFIX,126.com,DIRECT
+  - DOMAIN-SUFFIX,aliyun.com,DIRECT
+  - DOMAIN-SUFFIX,alipay.com,DIRECT
+  - DOMAIN-SUFFIX,tencent.com,DIRECT
+  - DOMAIN-SUFFIX,bilibili.com,DIRECT
+  - DOMAIN-SUFFIX,bilivideo.com,DIRECT
+  - DOMAIN-SUFFIX,douyin.com,DIRECT
+  - DOMAIN-SUFFIX,toutiao.com,DIRECT
+  - DOMAIN-SUFFIX,weixin.qq.com,DIRECT
+  - DOMAIN-SUFFIX,weixin.com,DIRECT
+  - DOMAIN-SUFFIX,dingtalk.com,DIRECT
+  - DOMAIN-SUFFIX,zhihu.com,DIRECT
+  - DOMAIN-SUFFIX,csdn.net,DIRECT
+  - DOMAIN-SUFFIX,jianshu.com,DIRECT
+  - DOMAIN-SUFFIX,weibo.com,DIRECT
+  - DOMAIN-SUFFIX,smzdm.com,DIRECT
+  - DOMAIN-SUFFIX,youku.com,DIRECT
+  - DOMAIN-SUFFIX,iqiyi.com,DIRECT
+  - DOMAIN-SUFFIX,qqmusic.qq.com,DIRECT
+  - DOMAIN-SUFFIX,music.163.com,DIRECT
+  - DOMAIN-KEYWORD,baidu,DIRECT
+  - DOMAIN-KEYWORD,alicdn,DIRECT
+  - DOMAIN-KEYWORD,aliyun,DIRECT
+  - GEOIP,CN,DIRECT
+
+  # 🛡️ 广告拦截
+  - DOMAIN-SUFFIX,ad.com,REJECT
+  - DOMAIN-SUFFIX,adservice.google.com,REJECT
+  - DOMAIN-KEYWORD,analytics,REJECT
+  - DOMAIN-KEYWORD,tracking,REJECT
+  - DOMAIN-KEYWORD,advertising,REJECT
+
+  # 🌐 默认 - 全部节点
+  - MATCH,🔀 全部节点
